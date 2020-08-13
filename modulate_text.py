@@ -70,23 +70,23 @@ class ModulateText:
             tokens = [token for token in jieba.cut(text, cut_all=True)]
             tokens = [str(token) for token in tokens]
             self.tokens = tokens
-            self.state = "ordered within sentence"
+            self.state = state
 
             if randomize_across_sentence:
                 shuffle(tokens)
                 self.tokens = tokens
-                self.state = "random across sentence"
+                self.state = "random outbound"
 
         elif language == "chinese" and parse_type == "by word":
             tokens = [token for token in jieba.cut(text, cut_all=False)]
             tokens = [str(token) for token in tokens]
             self.tokens = tokens
-            self.state = "ordered"
+            self.state = state
 
             if randomize_across_sentence:
                 shuffle(tokens)
                 self.tokens = tokens
-                self.state = "random across sentence"
+                self.state = "random outbound"
             
             
     

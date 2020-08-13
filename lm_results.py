@@ -91,7 +91,7 @@ class LMResults:
     # elif test.language == "chinese":
     #   sentence = [token for token in jieba.cut(sentence, cut_all=True)]
       # return [str(token) for token in sentence]
-    elif test.language == "dutch" or test.langauge == "turkish":
+    elif test.language == "dutch" or test.language == "turkish":
       return [token.casefold() for token in nltk.tokenize.word_tokenize(sentence, language=test.language) if token.isalnum()]
 
 
