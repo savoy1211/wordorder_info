@@ -4,7 +4,7 @@ from spacy.tokenizer import Tokenizer
 from spacy.lang.nl import Dutch
 from random import shuffle
 # from download_local_gutenberg_texts import *
-
+nltk.download('punkt')
 class ModulateText:
     def __init__(self, text, state="ordered inbound", randomize_within_sentence=False, randomize_across_sentence=False, language="english", parse_type="by character"):
         self.text = text
@@ -17,8 +17,9 @@ class ModulateText:
 
         # elif language == "dutch":
         #     language = "dutch"
-            
-        self.tokens = [token.casefold() for token in nltk.tokenize.word_tokenize(text, language=language) if token.isalnum()]
+        
+        if language != "chinese":
+            self.tokens = [token.casefold() for token in nltk.tokenize.word_tokenize(text, language=language) if token.isalnum()]
         self.state = state
 
         if randomize_within_sentence:
