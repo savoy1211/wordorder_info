@@ -77,11 +77,11 @@ class LMResults:
       return sent_detector.tokenize(test.text.strip(), realign_boundaries=False)
     # elif test.language == "chinese":
     #   return list(self.chinese_sents(test.text))
-    elif test.language == "dutch":
+    elif test.language == "dutch" or test.language == "turkish":
       # nlp = Dutch()
       # nlp.add_pipe(nlp.create_pipe('sentencizer'))
       # doc = nlp(test.text)
-      sent_detector = nltk.data.load('tokenizers/punkt/dutch.pickle')
+      sent_detector = nltk.data.load('tokenizers/punkt/'+test.language+'.pickle')
       return sent_detector.tokenize(test.text.strip(), realign_boundaries=False)
       # return [str(sent) for sent in list(doc.sents)]
 
@@ -90,12 +90,10 @@ class LMResults:
       return [token.casefold() for token in nltk.tokenize.word_tokenize(sentence) if token.isalnum()]
     # elif test.language == "chinese":
     #   sentence = [token for token in jieba.cut(sentence, cut_all=True)]
-      return [str(token) for token in sentence]
-    elif test.language == "dutch":
-      # nlp = Dutch()
-      # tokenizer = Tokenizer(nlp.vocab)
-      # return [str(token) for token in list(tokenizer(sentence))]
-      return [token.casefold() for token in nltk.tokenize.word_tokenize(sentence, language="dutch") if token.isalnum()]
+      # return [str(token) for token in sentence]
+    elif test.language == "dutch" or test.langauge == "turkish":
+      return [token.casefold() for token in nltk.tokenize.word_tokenize(sentence, language=test.language) if token.isalnum()]
+
 
   def chinese_sents(self, paragraph):
       for sent in re.findall(u'[^!?。\.\!\?]+[!?。\.\!\?]?', paragraph, flags=re.U):

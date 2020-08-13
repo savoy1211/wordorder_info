@@ -30,13 +30,13 @@ class ModulateText:
               shuffle(sentence_tokens)
               final_randomized_tokens += sentence_tokens+['.']
             text_randomized = " ".join(final_randomized_tokens)
-            self.random_tokens = final_randomized_tokens
+            self.tokens = final_randomized_tokens
             self.state = "random inbound"
             
         if randomize_across_sentence:
             tokens = [token.casefold() for token in nltk.tokenize.word_tokenize(text, language=language) if token.isalnum()]
             shuffle(tokens)
-            self.random_tokens = tokens
+            self.tokens = tokens
             self.state = "random outbound"
 
         # elif language == "dutch":

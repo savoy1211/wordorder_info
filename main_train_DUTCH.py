@@ -32,7 +32,7 @@ test = ModulateText(dutch_10, language="dutch")
 print("Test text created!")
 t = LMResults(model, test)
 t.get_results("LM_n3_(DUTCH)_a0.1_OI_train(90)_test(10).txt")
-file = open("LM_n3_(DUTCH)_a0.1_OI_train(100)_test(100)", "wb")
+file = open("LM_n3_(DUTCH)_a0.1_OI_train(90)_test(90)", "wb")
 p.dump(model, file)
 print("LM created!")
 
