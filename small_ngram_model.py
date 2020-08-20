@@ -70,6 +70,20 @@ class NgramModel:
                 sub_ngram = right_truncate(ngram, i)
                 self.freq[sub_ngram] += 1
 
+        freq_extra = Counter()
+        for ngram in ngrams(tokens, n):
+            freq_extra[ngram] += 1
+            for i in range(n):
+                sub_ngram = left_truncate(ngram, i)
+                freq_extra[sub_ngram] += 1
+
+        freq_remaining = [lost_freq for lost_freq in freq_extra if lost_freq not in self.freq]
+        for i in freq_remaining:
+            self.freq.update({i: freq_extra.get(i)})
+        
+        print(self.freq)
+        print(self.vocab)
+
     def conditional_logprob(self, token, context):
         """ Calculate logp(token | context) """
         combined = context + (token,)

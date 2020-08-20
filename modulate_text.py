@@ -3,42 +3,47 @@ import jieba
 from spacy.tokenizer import Tokenizer
 from spacy.lang.nl import Dutch
 from random import shuffle
+from lemmatizer import *
 # from download_local_gutenberg_texts import *
 nltk.download('punkt')
 class ModulateText:
-    def __init__(self, text, state="ordered inbound", randomize_within_sentence=False, randomize_across_sentence=False, language="english", parse_type="by character"):
+    def __init__(self, text, state="ordered inbound", randomize_within_sentence=False, randomize_across_sentence=False, language="english", parse_type="by character", lemmatize=False):
         self.text = text
         self.language = language
-        # if language == "english":
-        #     language = "english"
 
-        # elif language == "turkish":
-        #     language = "turkish"
-
-        # elif language == "dutch":
-        #     language = "dutch"
-        
         if language != "chinese":
-            self.tokens = [token.casefold() for token in nltk.tokenize.word_tokenize(text, language=language) if token.isalnum()]
-        self.state = state
+            if language == "turkish" and lemmatize is True: 
+                self.tokens = [get_lemmas(token.casefold(), 1)[0] for token in nltk.tokenize.word_tokenize(text, language=language) if token.isalnum()]
+                print(self.tokens[:20])
+            else:
+                self.tokens = [token.casefold() for token in nltk.tokenize.word_tokenize(text, language=language) if token.isalnum()]
+            self.state = state
 
-        if randomize_within_sentence:
-            sent_detector = nltk.data.load('tokenizers/punkt/'+language+'.pickle')
-            sentences = sent_detector.tokenize(text.strip(), realign_boundaries=False)
-            final_randomized_tokens = []
-            for sentence in sentences:
-              sentence_tokens = [token.casefold() for token in nltk.tokenize.word_tokenize(sentence, language=language) if token.isalnum()]
-              shuffle(sentence_tokens)
-              final_randomized_tokens += sentence_tokens+['.']
-            text_randomized = " ".join(final_randomized_tokens)
-            self.tokens = final_randomized_tokens
-            self.state = "random inbound"
-            
-        if randomize_across_sentence:
-            tokens = [token.casefold() for token in nltk.tokenize.word_tokenize(text, language=language) if token.isalnum()]
-            shuffle(tokens)
-            self.tokens = tokens
-            self.state = "random outbound"
+            if randomize_within_sentence:
+                sent_detector = nltk.data.load('tokenizers/punkt/'+language+'.pickle')
+                sentences = sent_detector.tokenize(text.strip(), realign_boundaries=False)
+                final_randomized_tokens = []
+                for sentence in sentences:
+                    if language == "turkish" and lemmatize is True:
+                        sentence_tokens = [get_lemmas(token.casefold(), 1)[0] for token in nltk.tokenize.word_tokenize(sentence, language=language) if token.isalnum()]
+                        print(self.tokens[:20])
+                    else:
+                        sentence_tokens = [token.casefold() for token in nltk.tokenize.word_tokenize(sentence, language=language) if token.isalnum()]
+                    shuffle(sentence_tokens)
+                    final_randomized_tokens += sentence_tokens+['.']
+                text_randomized = " ".join(final_randomized_tokens)
+                self.tokens = final_randomized_tokens
+                self.state = "random inbound"
+                
+            if randomize_across_sentence:
+                if language == "turkish" and lemmatize is True:
+                    sentence_tokens = [get_lemmas(token.casefold(), 1)[0] for token in nltk.tokenize.word_tokenize(sentence, language=language) if token.isalnum()]
+                    print(self.tokens[:20])
+                else:
+                    sentence_tokens = [token.casefold() for token in nltk.tokenize.word_tokenize(sentence, language=language) if token.isalnum()]
+                shuffle(tokens)
+                self.tokens = tokens
+                self.state = "random outbound"
 
         # elif language == "dutch":
         #     nlp = Dutch()
