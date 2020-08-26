@@ -4,14 +4,27 @@ from spacy.tokenizer import Tokenizer
 from spacy.lang.nl import Dutch
 from random import shuffle
 from lemmatizer import *
+from hungarian_tokens_sents import *
 # from download_local_gutenberg_texts import *
 nltk.download('punkt')
 class ModulateText:
-    def __init__(self, text, state="ordered inbound", randomize_within_sentence=False, randomize_across_sentence=False, language="english", parse_type="by character", lemmatize=False):
+    def __init__(self, text, state="ordered inbound", randomize_within_sentence=False, randomize_across_sentence=False, language="english", parse_type="by character", lemmatize=False, id_hungarian=""):
         self.text = text
         self.language = language
 
-        if language != "chinese":
+        if language == "hungarian" and state == "ordered inbound":
+            self.tokens = get_hungarian_tokens(id_hungarian)
+            self.state = state
+            self.id_hungarian = id_hungarian
+
+        elif language == "hungarian":
+            tokens = get_hungarian_tokens(id_hungarian)
+            shuffle(tokens)
+            self.tokens = tokens
+            self.state = state
+            self.id_hungarian = id_hungarian
+
+        elif language != "chinese":
             if language == "turkish" and lemmatize is True: 
                 self.tokens = [get_lemmas(token.casefold(), 1)[0] for token in nltk.tokenize.word_tokenize(text, language=language) if token.isalnum()]
                 print(self.tokens[:20])
@@ -72,9 +85,24 @@ class ModulateText:
         #         self.random_tokens = tokens
         #         self.state = "random across sentence"
 
+
         if language == "chinese" and parse_type == "by character":
             tokens = [token for token in jieba.cut(text, cut_all=True)]
-            tokens = [str(token) for token in tokens]
+            stop = l = [ '︰', '︰“', '︰「', '︼', '﹁', '﹂，', '﹍﹍」', '﹐', '﹒', '﹔', '﹔??', '﹔「', '﹔」', '﹔『', '﹕', '﹕“', '﹕「', '﹕「『', '﹕『', '﹕【', '﹖', '﹖”', '﹖」', '﹗', '﹗”', '﹛', '﹞', '！', '！"', '！"□', "！'", '！\'"', "！'」", '！??', '！`', '！——', '！’', '！’”', '！’”《', '！’\ue21e', '！“', '！”', '！”——', '！”“', '！”《', '！”〔', '！•', '！………」', '！……」', '！□', '！《', ' ！「', '！」', '！」[', '！」《', '！」「', '！」」', '！」\ue3fd', '！」（', '！」）。', '！」），', '！」，', '！」－－「', '！『', '！』', '！』」', '！【', '！〔', '！〕」', '！（', '！）', '！，', '！，”', '！－－', '！？', '！［', '＃', '（', '（?', '（??）', '（“', '（《', '（「', '（〕', '）', "）'", '）[', '）、', '）。', '）。」', '）。』', '）〉', '）」', '）】', '）〔', '）！', '）！」', ' ）（', '），', '），[', '），〔', '）：', '）；', '）？', ' ）？」', '）？』', '）？【', '）？［', '＊', '＋', '，', '，"', "，'", '，(', '，*【', '，<', '，?', '，[', '，[[', '，`', '，{', '，Ш', '，——', '，‘', '，’', '，’”', '，’”《', '，’《', '，“', '，“𩥡', '，”', '，”《', '，……', '，……"', '，……」', '，……［', '，…」', '，─', '，═', '，══', '，▉', '，■', '，□', '，□□', '，□□□□', '，□□，', '，□、', '，□、□、', '，□。', '，□々', '，□，', '，、', '，。', '，〈', '，《', '\n',]
+            more_stop = ["', ",'?','!','(',')',']','[',':','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','.','-','/','*','.',',',"'",'"']
+            for each in more_stop:
+                stop.append(each)
+            for each in stop:
+                tokens = [t.replace(each, "") for t in tokens]
+            new_tokens = []
+            for t in tokens:
+                if len(t) == 1:
+                    new_tokens.append(t)
+                else:
+                    list_tokens = list(t)
+                    for each in list_tokens:
+                        new_tokens.append(each)
+            tokens = [str(token) for token in new_tokens]
             self.tokens = tokens
             self.state = state
 
