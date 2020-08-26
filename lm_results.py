@@ -44,7 +44,10 @@ class LMResults:
 
   def logp_words(self, tokens):
       """Get conditional plog of words using ngram model"""
-      return self.trained_model.window_logprob(tokens)
+      prob = self.trained_model.window_logprob(tokens)
+      if prob == -float("inf"):
+        return 0
+      return prob
     
   def logp_word_set(self, tokens): 
       """Get plog sum of each tokens' permutations"""
@@ -89,8 +92,22 @@ class LMResults:
     if test.language == "english":
       return [token.casefold() for token in nltk.tokenize.word_tokenize(sentence) if token.isalnum()]
     elif test.language == "chinese":
-      sentence = [token for token in jieba.cut(sentence, cut_all=True)]
-      return [str(token) for token in sentence]
+      tokens = [token for token in jieba.cut(text, cut_all=True)]
+      stop = l = [ '︰', '︰“', '︰「', '︼', '﹁', '﹂，', '﹍﹍」', '﹐', '﹒', '﹔', '﹔??', '﹔「', '﹔」', '﹔『', '﹕', '﹕“', '﹕「', '﹕「『', '﹕『', '﹕【', '﹖', '﹖”', '﹖」', '﹗', '﹗”', '﹛', '﹞', '！', '！"', '！"□', "！'", '！\'"', "！'」", '！??', '！`', '！——', '！’', '！’”', '！’”《', '！’\ue21e', '！“', '！”', '！”——', '！”“', '！”《', '！”〔', '！•', '！………」', '！……」', '！□', '！《', ' ！「', '！」', '！」[', '！」《', '！」「', '！」」', '！」\ue3fd', '！」（', '！」）。', '！」），', '！」，', '！」－－「', '！『', '！』', '！』」', '！【', '！〔', '！〕」', '！（', '！）', '！，', '！，”', '！－－', '！？', '！［', '＃', '（', '（?', '（??）', '（“', '（《', '（「', '（〕', '）', "）'", '）[', '）、', '）。', '）。」', '）。』', '）〉', '）」', '）】', '）〔', '）！', '）！」', ' ）（', '），', '），[', '），〔', '）：', '）；', '）？', ' ）？」', '）？』', '）？【', '）？［', '＊', '＋', '，', '，"', "，'", '，(', '，*【', '，<', '，?', '，[', '，[[', '，`', '，{', '，Ш', '，——', '，‘', '，’', '，’”', '，’”《', '，’《', '，“', '，“𩥡', '，”', '，”《', '，……', '，……"', '，……」', '，……［', '，…」', '，─', '，═', '，══', '，▉', '，■', '，□', '，□□', '，□□□□', '，□□，', '，□、', '，□、□、', '，□。', '，□々', '，□，', '，、', '，。', '，〈', '，《', '\n',]
+      more_stop = ["', ",'?','!','(',')',']','[',':','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','.','-','/','*','.',',',"'",'"']
+      for each in more_stop:
+          stop.append(each)
+      for each in stop:
+          tokens = [t.replace(each, "") for t in tokens]
+      new_tokens = []
+      for t in tokens:
+          if len(t) == 1:
+              new_tokens.append(t)
+          else:
+              list_tokens = list(t)
+              for each in list_tokens:
+                  new_tokens.append(each)
+      return [str(token) for token in new_tokens]
     elif test.language == "dutch" or test.language == "turkish":
       return [token.casefold() for token in nltk.tokenize.word_tokenize(sentence, language=test.language) if token.isalnum()]
 
@@ -101,21 +118,22 @@ class LMResults:
 
   def get_windows_sentence_outbound(self, test, window_size):
     # ... for a sliding window of contiguous words of size window_size, get H[words] and H[word set] ...
+
+    # # ... for a sliding window of contiguous words of size window_size, get H[words] and H[word set] ...
+    print("OUTBOUND :)")
     windows, window = [], []
     t = test.random_tokens if test.state == "random outbound" else test.tokens
-    return slider.sliding(t, window_size)
-    # # ... for a sliding window of contiguous words of size window_size, get H[words] and H[word set] ...
-    # print("OUTBOUND :)")
+    return self.sliding(t, window_size)
     # windows, window = [], []
     # t = test.random_tokens if test.state == "random across sentence" else test.tokens
     # append_number, sentence_trunc = 0, t
     # num_windows = lambda tokens, window_size: 1 if tokens < window_size else tokens-window_size+1
     # while append_number != num_windows(len(t), window_size):
-    #  window = sentence_trunc[:window_size]
-    #  if len(window) > 0 and len(window) == window_size:
-    #    windows.append(window)
-    #  append_number += 1
-    #  sentence_trunc = sentence_trunc[1:]
+    #   window = sentence_trunc[:window_size]
+    #   if len(window) > 0 and len(window) == window_size:
+    #     windows.append(window)
+    #   append_number += 1
+    #   sentence_trunc = sentence_trunc[1:]
     # return windows
   
   def get_windows(self, test, window_size):
@@ -128,11 +146,23 @@ class LMResults:
   def survey_text(self, model, test, window_size):
     # ... for a sliding window of contiguous words of size window_size, get H[words] and H[word set] ...
     windows = self.get_windows(test, window_size)
-    logps_words = np.array([self.logp_words(window) for window in windows])
-    logps_word_sets = np.array([self.logp_word_set(window) for window in windows])
+    print("got windows!")
+    logps_words = np.array([self.logp_words(list(window)) for window in list(windows)])
+    logps_word_sets = np.array([self.logp_word_set(list(window)) for window in list(windows)])
     H_words = -np.mean(logps_words)
     H_word_sets = -np.mean(logps_word_sets)
     return H_words, H_word_sets
+    
+  def sliding(self, iterable, n):
+      assert n >= 0
+      its = itertools.tee(iterable, n)
+      for i, iterator in enumerate(its):
+          for _ in range(i):
+              try:
+                  next(iterator)
+              except StopIteration:
+                  return zip([])
+      return zip(*its)
     
 class LMResultsBaseline(LMResults):
   def __init__(self, trained_model, test_text):
@@ -180,22 +210,10 @@ class LMResultsBaseline(LMResults):
     self.zero_prob_ratios = []
     # ... for a sliding window of contiguous words of size window_size, get H[words] and H[word set] ...
     windows = self.get_windows(test, window_size)
-    logps_words = np.array([self.logp_words(window) for window in windows])
-    logps_word_sets = np.array([self.logp_word_set(window) for window in windows])
+    print("got windows!")
+    logps_words = np.array([self.logp_words(list(window)) for window in list(windows)])
+    logps_word_sets = np.array([self.logp_word_set(list(window)) for window in list(windows)])
     ratio_of_zeros_permuted_windows = np.mean(self.zero_prob_ratios)
     H_words = -np.mean(logps_words)
     H_word_sets = -np.mean(logps_word_sets)
     return H_words, H_word_sets, ratio_of_zeros_permuted_windows
-
-
-
-def sliding(iterable, n):
-    assert n >= 0
-    its = itertools.tee(iterable, n)
-    for i, iterator in enumerate(its):
-        for _ in range(i):
-            try:
-                next(iterator)
-            except StopIteration:
-                return zip([])
-    return zip(*its)
