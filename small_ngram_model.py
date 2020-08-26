@@ -81,8 +81,8 @@ class NgramModel:
         for i in freq_remaining:
             self.freq.update({i: freq_extra.get(i)})
         
-        print(self.freq)
-        print(self.vocab)
+        # print(self.freq)
+        # print(self.vocab)
 
     def conditional_logprob(self, token, context):
         """ Calculate logp(token | context) """
