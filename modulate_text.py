@@ -4,7 +4,7 @@ from spacy.tokenizer import Tokenizer
 from spacy.lang.nl import Dutch
 from random import shuffle
 from lemmatizer import *
-from hungarian_tokens_sents import *
+# from hungarian_tokens_sents import *
 # from download_local_gutenberg_texts import *
 nltk.download('punkt')
 class ModulateText:

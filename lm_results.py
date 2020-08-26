@@ -1,6 +1,7 @@
 from modulate_text import *
 from small_ngram_model import *
 from load_wiki_txt import *
+# from hungarian_tokens_sents import *
 import numpy as np
 import pandas as pd
 import scipy.special
@@ -45,13 +46,15 @@ class LMResults:
   def logp_words(self, tokens):
       """Get conditional plog of words using ngram model"""
       prob = self.trained_model.window_logprob(tokens)
-      if prob == -float("inf"):
-        return 0
+      # if prob == -float("inf"):
+      #   print("got 0")
+        # return 0
       return prob
     
   def logp_word_set(self, tokens): 
       """Get plog sum of each tokens' permutations"""
       logprobs = [self.logp_words(reordered_tokens) for reordered_tokens in itertools.permutations(tokens)]
+      # print(logprobs)
       if not logprobs:
           logprobs = [0]
       return scipy.special.logsumexp(logprobs)
@@ -148,6 +151,8 @@ class LMResults:
     windows = self.get_windows(test, window_size)
     print("got windows!")
     logps_words = np.array([self.logp_words(list(window)) for window in list(windows)])
+    windows = self.get_windows(test, window_size)
+    print('got windows, again!')
     logps_word_sets = np.array([self.logp_word_set(list(window)) for window in list(windows)])
     H_words = -np.mean(logps_words)
     H_word_sets = -np.mean(logps_word_sets)
