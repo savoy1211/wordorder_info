@@ -23,6 +23,12 @@ import pickle as p
 		-vocab:      10,263
 		-t/v:         525.1
 """
+mandarin_wiki_remain = mandarin_wiki[int(len(mandarin_wiki)/5.56):]
+mandarin_wiki_10 = mandarin_wiki_remain[:int(len(mandarin_wiki_remain)/48)]
+
+mandarin_gutenberg_remain = mandarin_gutenberg[int(len(mandarin_gutenberg)/2.79):]
+mandarin_gutenberg_10 = mandarin_gutenberg_remain[:int(len(mandarin_gutenberg_remain)/18.7)]
+
 train = ModulateText(mandarin_100[:int(len(mandarin_100)*0.6/2)], state="ordered outbound", language="chinese", parse_type="by character")
 model = NgramModel(train.tokens, alpha=0, n=3)
 print("LM setup complete!")

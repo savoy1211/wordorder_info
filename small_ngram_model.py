@@ -19,11 +19,11 @@ def left_truncate(xs, n):
     else:
         return tuple(xs[-n:])
 
-def test_left_truncate():
-    assert left_truncate("abcdef", 2) == tuple("ef")
-    assert left_truncate([1,2,'a'], 1) == ('a',)
-    assert left_truncate("abc", 0) == ()
-    assert left_truncate("ab", 10) == tuple("ab")    
+# def test_left_truncate():
+#     assert left_truncate("abcdef", 2) == tuple("ef")
+#     assert left_truncate([1,2,'a'], 1) == ('a',)
+#     assert left_truncate("abc", 0) == ()
+#     assert left_truncate("ab", 10) == tuple("ab")    
 
 def right_truncate(xs, n):
     assert n >= 0
@@ -35,9 +35,9 @@ def ngrams(xs, n):
     assert n >= 0
     return zip(*[xs[i:] for i in range(n)])
 
-def test_ngrams():
-    assert list(ngrams("abc", 2)) == [('a', 'b'), ('b', 'c')]
-    assert list(ngrams("a", 2)) == []
+# def test_ngrams():
+#     assert list(ngrams("abc", 2)) == [('a', 'b'), ('b', 'c')]
+#     assert list(ngrams("a", 2)) == []
 
 def tokens_in_context(xs):
     """ Return all the elements of xs and their context (preceding elements) """
@@ -46,9 +46,9 @@ def tokens_in_context(xs):
         yield x, tuple(context)
         context.append(x)
 
-def test_tokens_in_context():
-    assert list(tokens_in_context("abd")) == [('a', ()), ('b', ('a',)), ('d', ('a', 'b'))]
-    assert list(tokens_in_context("")) == []
+# def test_tokens_in_context():
+#     assert list(tokens_in_context("abd")) == [('a', ()), ('b', ('a',)), ('d', ('a', 'b'))]
+#     assert list(tokens_in_context("")) == []
 
 class NgramModel:
     def __init__(self, tokens, n=3, alpha=1, include_unk_in_vocab=True):
@@ -102,39 +102,39 @@ class NgramModel:
             result += self.conditional_logprob(token, context)
         return result
 
-def test_mle_ngram_model():
-    model = NgramModel("one two one three one two".split(), n=2, alpha=0, include_unk_in_vocab=False)
-    assert round(math.exp(model.conditional_logprob('two', ('one',))), 5) == round(2/3, 5)
-    assert round(math.exp(model.conditional_logprob('three', ('one',))), 5) == round(1/3, 5)
-    # p(one two) = p(one)p(two|one) = 3/5 * 2/3 = 2/5
-    assert round(math.exp(model.window_logprob("one two".split())), 5) == round(2/5, 5)
-    # assert total probability for all possible windows is 1
-    assert sum(math.exp(model.window_logprob([w1, w2])) for w1 in model.vocab for w2 in model.vocab) == 1
+# def test_mle_ngram_model():
+#     model = NgramModel("one two one three one two".split(), n=2, alpha=0, include_unk_in_vocab=False)
+#     assert round(math.exp(model.conditional_logprob('two', ('one',))), 5) == round(2/3, 5)
+#     assert round(math.exp(model.conditional_logprob('three', ('one',))), 5) == round(1/3, 5)
+#     # p(one two) = p(one)p(two|one) = 3/5 * 2/3 = 2/5
+#     assert round(math.exp(model.window_logprob("one two".split())), 5) == round(2/5, 5)
+#     # assert total probability for all possible windows is 1
+#     assert sum(math.exp(model.window_logprob([w1, w2])) for w1 in model.vocab for w2 in model.vocab) == 1
     
-    model = NgramModel("this is a test a test".split(), n=2, alpha=0, include_unk_in_vocab=False)
-    # p(a test) = p(a)p(test|a) = 2/5 * 1 = 2/5
-    assert round(math.exp(model.window_logprob("a test".split())), 5) == round(2/5, 5)
-    # p(test a) = p(test)p(a | test) = 1/5 * 1 = 1/5
-    assert round(math.exp(model.window_logprob("test a".split())), 5) == round(1/5, 5)
-    assert sum(math.exp(model.window_logprob([w1, w2])) for w1 in model.vocab for w2 in model.vocab) == 1    
+#     model = NgramModel("this is a test a test".split(), n=2, alpha=0, include_unk_in_vocab=False)
+#     # p(a test) = p(a)p(test|a) = 2/5 * 1 = 2/5
+#     assert round(math.exp(model.window_logprob("a test".split())), 5) == round(2/5, 5)
+#     # p(test a) = p(test)p(a | test) = 1/5 * 1 = 1/5
+#     assert round(math.exp(model.window_logprob("test a".split())), 5) == round(1/5, 5)
+#     assert sum(math.exp(model.window_logprob([w1, w2])) for w1 in model.vocab for w2 in model.vocab) == 1    
 
-    model = NgramModel("this is a test of a test of a test".split(), n=3, alpha=0, include_unk_in_vocab=False)
-    # p(a test of) = p(a) p(test|a) p(of | a test) = 2/8 * 1 * 1 = 1/4
-    assert round(math.exp(model.window_logprob("a test of".split())), 5) == round(1/4, 5)
-    assert round(sum(math.exp(model.window_logprob([w1, w2, w3])) for w1 in model.vocab for w2 in model.vocab for w3 in model.vocab), 5) == 1
+#     model = NgramModel("this is a test of a test of a test".split(), n=3, alpha=0, include_unk_in_vocab=False)
+#     # p(a test of) = p(a) p(test|a) p(of | a test) = 2/8 * 1 * 1 = 1/4
+#     assert round(math.exp(model.window_logprob("a test of".split())), 5) == round(1/4, 5)
+#     assert round(sum(math.exp(model.window_logprob([w1, w2, w3])) for w1 in model.vocab for w2 in model.vocab for w3 in model.vocab), 5) == 1
 
-def test_additive_smoothing_ngram_model():
-    model = NgramModel("one two one two one three".split(), n=2, alpha=.5, include_unk_in_vocab=False)
-    # 2 + .5 / (1 + .5 + 2 + .5 + 0 + .5) = 5/9
-    assert round(math.exp(model.conditional_logprob('two', ('one',))), 5) == round(5/9, 5)
-    # 1 + .5 / (1 + .5 + 2 + .5 + 0 + .5) = 1/3    
-    assert round(math.exp(model.conditional_logprob('three', ('one',))), 5) == round(1/3, 5)
-    assert round(sum(math.exp(model.window_logprob([w1, w2])) for w1 in model.vocab for w2 in model.vocab), 5) == 1
+# def test_additive_smoothing_ngram_model():
+#     model = NgramModel("one two one two one three".split(), n=2, alpha=.5, include_unk_in_vocab=False)
+#     # 2 + .5 / (1 + .5 + 2 + .5 + 0 + .5) = 5/9
+#     assert round(math.exp(model.conditional_logprob('two', ('one',))), 5) == round(5/9, 5)
+#     # 1 + .5 / (1 + .5 + 2 + .5 + 0 + .5) = 1/3    
+#     assert round(math.exp(model.conditional_logprob('three', ('one',))), 5) == round(1/3, 5)
+#     assert round(sum(math.exp(model.window_logprob([w1, w2])) for w1 in model.vocab for w2 in model.vocab), 5) == 1
 
-    model = NgramModel("one two one two one three".split(), n=3, alpha=.5, include_unk_in_vocab=False)
-    # 2 + .5 / (2 + .5 + .5 + .5) = 5/7
-    assert round(math.exp(model.conditional_logprob('one', ('one', 'two',))), 5) == round(5/7, 5)
-    assert round(sum(math.exp(model.window_logprob([w1, w2, w3])) for w1 in model.vocab for w2 in model.vocab for w3 in model.vocab), 5) == 1    
+#     model = NgramModel("one two one two one three".split(), n=3, alpha=.5, include_unk_in_vocab=False)
+#     # 2 + .5 / (2 + .5 + .5 + .5) = 5/7
+#     assert round(math.exp(model.conditional_logprob('one', ('one', 'two',))), 5) == round(5/7, 5)
+#     assert round(sum(math.exp(model.window_logprob([w1, w2, w3])) for w1 in model.vocab for w2 in model.vocab for w3 in model.vocab), 5) == 1    
 
 if __name__ == '__main__':
     import nose

@@ -31,13 +31,13 @@ for file in all_files:
             mega_text_10 += text
     i+=1
 
-file = open("lm_corpus_english_100", "w")
+file = open("texts/lm_corpus_english_100", "w")
 file.write(mega_text_100)
 
-file = open("lm_corpus_english_90", "w")
+file = open("texts/lm_corpus_english_90", "w")
 file.write(mega_text_90)
 
-file = open("lm_corpus_english_10", "w")
+file = open("texts/lm_corpus_english_10", "w")
 file.write(mega_text_10)
 # l10 = len(mega_text_10)
 # l50 = len(mega_text_50)

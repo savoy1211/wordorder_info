@@ -1,6 +1,7 @@
 from modulate_text import *
 from small_ngram_model import *
 from load_wiki_txt import *
+from test_token_vocab_size import *
 # from hungarian_tokens_sents import *
 import numpy as np
 import pandas as pd
@@ -217,6 +218,8 @@ class LMResultsBaseline(LMResults):
     windows = self.get_windows(test, window_size)
     print("got windows!")
     logps_words = np.array([self.logp_words(list(window)) for window in list(windows)])
+    windows = self.get_windows(test, window_size)
+    print('got windows, again!')    
     logps_word_sets = np.array([self.logp_word_set(list(window)) for window in list(windows)])
     ratio_of_zeros_permuted_windows = np.mean(self.zero_prob_ratios)
     H_words = -np.mean(logps_words)

@@ -6,13 +6,13 @@ from random import shuffle
 from lemmatizer import *
 # from hungarian_tokens_sents import *
 # from download_local_gutenberg_texts import *
-nltk.download('punkt')
+# nltk.download('punkt')
 class ModulateText:
     def __init__(self, text, state="ordered inbound", randomize_within_sentence=False, randomize_across_sentence=False, language="english", parse_type="by character", lemmatize=False, id_hungarian=""):
         self.text = text
         self.language = language
 
-        if language == "hungarian" and state == "ordered inbound":
+        if language == "hungarian" and not randomize_across_sentence and not randomize_across_sentence:
             self.tokens = get_hungarian_tokens(id_hungarian)
             self.state = state
             self.id_hungarian = id_hungarian
