@@ -65,7 +65,9 @@ class LMResults:
     windows = []
     print("INBOUND")
     sentences = self.get_sents(test)
-    for sentence in sentences:
+    sentences_filtered = [s for s in sentences if len(s) > 0]
+    print("filtered!")
+    for sentence in sentences_filtered:
       sentence = self.get_sent_tokens(test, sentence)
       window = []
       append_number, sentence_trunc = 0, sentence
@@ -81,13 +83,15 @@ class LMResults:
   def get_sents(self, test):
     if test.language == "english":
       sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
-      return sent_detector.tokenize(test.text.strip(), realign_boundaries=False)
+      return sent_detector.tokenize(t.strip(), realign_boundaries=False)
     elif test.language == "chinese":
       return list(self.chinese_sents(test.text))
-    elif test.language == "dutch" or test.language == "turkish":
+    # elif test.language == "dutch" or test.language == "turkish":
+    else:
       # nlp = Dutch()
       # nlp.add_pipe(nlp.create_pipe('sentencizer'))
       # doc = nlp(test.text)
+      print(test.language)
       sent_detector = nltk.data.load('tokenizers/punkt/'+test.language+'.pickle')
       return sent_detector.tokenize(test.text.strip(), realign_boundaries=False)
       # return [str(sent) for sent in list(doc.sents)]
@@ -112,7 +116,8 @@ class LMResults:
               for each in list_tokens:
                   new_tokens.append(each)
       return [str(token) for token in new_tokens]
-    elif test.language == "dutch" or test.language == "turkish":
+    # elif test.language == "dutch" or test.language == "turkish":
+    else:
       return [token.casefold() for token in nltk.tokenize.word_tokenize(sentence, language=test.language) if token.isalnum()]
 
 

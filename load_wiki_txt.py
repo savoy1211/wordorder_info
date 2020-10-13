@@ -4,45 +4,46 @@ import requests
 
 # English
 """
-    english_wiki:
-        -tokens: 11,440,830
-        -vocab:     249,110
-        -t/v:          45.9
---------------------------------
-    -----WIKI-----
-    (10m tokens) -- Training set
-    english_wiki[:int(len(english_wiki)*10/11.440830)]
-        -tokens: 10,008,956
-        -vocab:     228096
-        -t/v:          43.9
---------------------------------
-    -----WIKI-----
-    (1m tokens) -- Test set
-    english_wiki[int(len(english_wiki)*(1-(1.01/11.440830))):]
-        -tokens:  1,003,141
-        -vocab:       60471
-        -t/v:          16.6
---------------------------------
-    -----WIKI-----
-    (5m tokens) -- Training set
-    english_wiki[:int(len(english_wiki)/2.15)]
-        -tokens:  5,328,333
-        -vocab:     160720
-        -t/v:          33.2
---------------------------------
-    -----WIKI-----
-    (500k tokens) -- Test set
-    english_wiki[int(len(english_wiki)*(1-(.504/11.440830))):]
-        -tokens:    500,424
-        -vocab:      40169
-        -t/v:          12.5
---------------------------------
-    -----WIKI-----
-    (100k tokens) -- Test set 
-    english_wiki[:int(len(english_wiki)*.1/11.440830)]
-        -tokens:    100,416
-        -vocab:      14,666
-        -t/v:           6.8
+-WIKI
+        english_wiki:
+            -tokens: 11,440,830
+            -vocab:     249,110
+            -t/v:          45.9
+
+        -----WIKI-----
+        (10m tokens) -- Training set
+        english_wiki[:int(len(english_wiki)*10/11.440830)]
+            -tokens: 10,008,956
+            -vocab:     228096
+            -t/v:          43.9
+    
+        -----WIKI-----
+        (1m tokens) -- Test set
+        english_wiki[int(len(english_wiki)*(1-(1.01/11.440830))):]
+            -tokens:  1,003,141
+            -vocab:       60471
+            -t/v:          16.6
+    
+        -----WIKI-----
+        (5m tokens) -- Training set
+        english_wiki[:int(len(english_wiki)/2.15)]
+            -tokens:  5,328,333
+            -vocab:     160720
+            -t/v:          33.2
+    
+        -----WIKI-----
+        (500k tokens) -- Test set
+        english_wiki[int(len(english_wiki)*(1-(.504/11.440830))):]
+            -tokens:    500,424
+            -vocab:      40169
+            -t/v:          12.5
+    
+        -----WIKI-----
+        (100k tokens) -- Test set 
+        english_wiki[:int(len(english_wiki)*.1/11.440830)]
+            -tokens:    100416
+            -vocab:      14666
+            -t/v:           6.8
 --------------------------------
     english_gutenberg:
         -tokens: 12,977,277
@@ -80,8 +81,8 @@ import requests
     --GUTENBERG--
     (100k tokens) -- Test set 
     english_gutenberg[:int(len(english_gutenberg)*0.104/12.977277)]
-        -tokens:    101,560
-        -vocab:       8,306
+        -tokens:    101560
+        -vocab:       8306
         -t/v:          12.2
 """
 english_100 =''
@@ -96,15 +97,111 @@ with open('texts/wiki_corpus_english_100', 'r', encoding="utf-8") as current_fil
     text = current_file.read().encode('utf-8')[1:]
     english_wiki = text.decode('utf-8', 'ignore')
 
+
 # english_wiki_10m = english_wiki[:int(len(english_wiki)*10/11.440830)]
 # english_wiki_1m = english_wiki[int(len(english_wiki)*(1-(1.01/11.440830))):]
 # english_wiki_5m = english_wiki[:int(len(english_wiki)/2.15)]
 # english_wiki_500k = english_wiki[int(len(english_wiki)*(1-(.504/11.440830))):]
 
-# english_gutenberg_10m = english_gutenberg[:int(len(english_gutenberg)*10/12.977277)]
-# english_gutenberg_1m = english_gutenberg[int(len(english_gutenberg)*(1-(1.1/12.977277))):]
-# english_gutenberg_5m = english_gutenberg[:int(len(english_gutenberg)/2.44)]
-# english_gutenberg_500k = english_gutenberg[int(len(english_gutenberg)*(1-(.5/12.977277))):]
+english_gutenberg_10m = english_gutenberg[:int(len(english_gutenberg)*10/12.977277)]
+english_gutenberg_1m = english_gutenberg[int(len(english_gutenberg)*(1-(1.1/12.977277))):]
+english_gutenberg_5m = english_gutenberg[:int(len(english_gutenberg)/2.44)]
+english_gutenberg_500k = english_gutenberg[int(len(english_gutenberg)*(1-(.5/12.977277))):]
+
+english_dev_set = english_gutenberg[int(len(english_gutenberg)*(1-(2.1/12.977277))):int(len(english_gutenberg)*(1-(1.1/12.977277)))]
+english_test_set = english_gutenberg_1m
+english_training_set = english_gutenberg_10m
+
+# Dutch
+"""
+--------------------------------
+    dutch_gutenberg:
+        -tokens: 12,684,330
+        -vocab:     282,221
+        -t/v:          44.9
+--------------------------------
+    --GUTENBERG--
+    (10m tokens) -- Training set
+    dutch_gutenberg[:int(len(dutch_gutenberg)*10.1/12.684330)]
+        -tokens: 10,016,033
+        -vocab:     255422
+        -t/v:          39.2
+--------------------------------
+    --GUTENBERG--
+    (1m tokens) -- Test set
+    dutch_gutenberg[int(len(dutch_gutenberg)*(1-(1/12.684330))):]
+        -tokens:  1,032,603
+        -vocab:      39594
+        -t/v:          26.1
+--------------------------------
+    ----WIKI----
+    (100k tokens) -- Test set
+        -tokens:    104134
+        -vocab:      14385
+        -t/v:          7.2
+--------------------------------
+    --GUTENBERG--
+    (5m tokens) -- Training set
+    dutch_gutenberg[:int(len(dutch_gutenberg)*5.2/12.684330)]
+        -tokens:  5,079,461
+        -vocab:     189646
+        -t/v:          26.8
+--------------------------------
+    --GUTENBERG--
+    (500k tokens) -- Test set 
+    dutch_gutenberg[int(len(dutch_gutenberg)*(1-(.49/12.684330))):]
+        -tokens:    504,851
+        -vocab:      16956
+        -t/v:          29.8
+--------------------------------
+    dutch_wiki:
+        -tokens: 11,874,453
+        -vocab:     412,609
+        -t/v:          28.8
+--------------------------------
+    ----WIKI----
+    (10m tokens) -- Training set
+    dutch_wiki[:int(len(dutch_wiki)*10.01/11.874453)]
+        -tokens: 10,000,546
+        -vocab:     366363
+        -t/v:          27.3
+--------------------------------
+    ----WIKI----
+    (1m tokens) -- Test set
+        -tokens: 1,009,240
+        -vocab:     86049
+        -t/v:          11.7
+--------------------------------
+    ----WIKI----
+    (100k tokens) -- Test set
+        -tokens:    101950
+        -vocab:      17489
+        -t/v:          5.8
+--------------------------------
+    ----WIKI----
+    (5m tokens) -- Training set
+        -tokens:    5017543
+        -vocab:      236134
+        -t/v:          21.2
+--------------------------------
+    ----WIKI----
+    (500k tokens) -- Test set
+        -tokens:    506520
+        -vocab:      53738
+        -t/v:          9.4
+"""
+dutch_100 =''
+dutch_gutenberg = ''
+dutch_wiki = ''
+with open('texts/gutenberg_corpus_dutch_100_new', 'r', encoding="utf-8") as current_file:
+    text = current_file.read().encode('utf-8')[1:]
+    dutch_100 = text.decode('utf-8', 'ignore')
+    dutch_gutenberg = dutch_100
+
+with open('texts/wiki_corpus_dutch_100_new', 'r', encoding="utf-8") as current_file:
+    text = current_file.read().encode('utf-8')[1:]
+    dutch_wiki = text.decode('utf-8', 'ignore')
+
 
 # Greek
 """
@@ -155,18 +252,6 @@ with open('texts/wiki_corpus_english_100', 'r', encoding="utf-8") as current_fil
         -t/v:          27.3
 
 """
-dutch_100 =''
-dutch_gutenberg = ''
-dutch_wiki = ''
-with open('texts/gutenberg_corpus_dutch_100_new', 'r', encoding="utf-8") as current_file:
-    text = current_file.read().encode('utf-8')[1:]
-    dutch_100 = text.decode('utf-8', 'ignore')
-    dutch_gutenberg = dutch_100
-
-with open('texts/wiki_corpus_dutch_100_new', 'r', encoding="utf-8") as current_file:
-    text = current_file.read().encode('utf-8')[1:]
-    dutch_wiki = text.decode('utf-8', 'ignore')
-
 
 greek_100 =''
 greek_gutenberg = ''
@@ -320,3 +405,37 @@ print("ALL TEXTS LOADED (en, du, zh, pl, po, tk, hu)")
 # file = open("lm_corpus_"+language+"_10_small", "w")
 # file.write(english_10)
 
+
+# German
+"""
+    german_gutenberg:
+        -tokens: 13,235,235
+        -vocab:     344,829
+        -t/v:          38.4
+--------------------------------
+    -----GUTENBERG-----
+    (10m tokens) -- Training set
+    german_gutenberg[:int(len(german_gutenberg)*9.4/13.235235)]
+        -tokens: 10,079,328
+        -vocab:     288,012
+        -t/v:          35.0
+--------------------------------
+    -----GUTENBERG-----
+    (1m tokens) -- Test set
+    german_gutenberg[int(len(german_gutenberg)*(1-(0.98/13.235235))):]
+        -tokens:  1,003,609
+        -vocab:      76,294
+        -t/v:          13.2
+--------------------------------
+"""
+
+german_100 =''
+german_gutenberg = ''
+german_wiki = ''
+with open('texts/gutenberg_corpus_german_10m_tokens_test', 'r', encoding="utf-8") as current_file:
+    text = current_file.read().encode('utf-8')[1:]
+    german_100 = text.decode('utf-8', 'ignore')
+    german_gutenberg = german_100
+    
+german_10m = german_gutenberg[:int(len(german_gutenberg)*9.4/13.235235)]
+german_1m = german_gutenberg[int(len(german_gutenberg)*(1-(0.98/13.235235))):]
