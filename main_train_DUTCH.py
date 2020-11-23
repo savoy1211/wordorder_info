@@ -1,102 +1,164 @@
 from lm_results import *
 import pickle as p
 
+# """
+# 	Gutenberg (ordered)
+# 	Train -- 10m
+# 	Test  --  1m (novel tokens)
+# """
+# # ORDERED OUTBOUND
+# train = ModulateText(dutch_gutenberg_10m, language="dutch")
+# model = NgramModel(train.tokens, alpha=0.001, n=3)
+# print("LM setup complete!")
+# test = ModulateText(dutch_gutenberg_1m, state="ordered outbound", language="dutch")
+# print("Test text created!")
+# t = LMResults(model, test)
+# t.get_results("DUTCH_gutenberg(train[10m]_test[1m])_a0.001_OO.txt")
+# file = open("DUTCH_gutenberg_model(train[10m])_a0.001", "wb")
+# p.dump(model, file)
+# print("LM created!")
+
+# # ORDERED INBOUND
+# test = ModulateText(dutch_gutenberg_1m, language="dutch")
+# print("Test text created!")
+# t = LMResults(model, test)
+# t.get_results("DUTCH_gutenberg(train[10m]_test[1m])_a0.001_OI.txt")
+# print("LM created!")
+
+# """
+# 	Gutenberg (ordered)
+# 	Train --   5m
+# 	Test  -- 500k (novel tokens)
+# """
+# # ORDERED OUTBOUND
+# train = ModulateText(dutch_gutenberg_5m, language="dutch")
+# model = NgramModel(train.tokens, alpha=0.001, n=3)
+# print("LM setup complete!")
+# test = ModulateText(dutch_gutenberg_500k, state="ordered outbound", language="dutch")
+# print("Test text created!")
+# t = LMResults(model, test)
+# t.get_results("DUTCH_gutenberg(train[5m]_test[500k])_a0.001_OO.txt")
+# file = open("DUTCH_gutenberg_model(train[5m])_a0.001", "wb")
+# p.dump(model, file)
+# print("LM created!")
+
+# # ORDERED INBOUND
+# test = ModulateText(dutch_gutenberg_5m, language="dutch")
+# print("Test text created!")
+# t = LMResults(model, test)
+# t.get_results("DUTCH_gutenberg(train[5m]_test[500k])_a0.001_OI.txt")
+# print("LM created!")
+
+
+# """
+# 	Wiki (ordered)
+# 	Train -- 10m
+# 	Test  --  1m (novel tokens)
+# """
+# # ORDERED OUTBOUND
+# train = ModulateText(dutch_wiki_10m, language="dutch")
+# model = NgramModel(train.tokens, alpha=0.001, n=3)
+# print("LM setup complete!")
+# test = ModulateText(dutch_wiki_1m, state="ordered outbound", language="dutch")
+# print("Test text created!")
+# t = LMResults(model, test)
+# t.get_results("DUTCH_wiki(train[10m]_test[1m])_a0.001_OO.txt")
+# file = open("DUTCH_wiki_model(train[10m])_a0.001", "wb")
+# p.dump(model, file)
+# print("LM created!")
+
+# # ORDERED INBOUND
+# test = ModulateText(dutch_wiki_1m, language="dutch")
+# print("Test text created!")
+# t = LMResults(model, test)
+# t.get_results("DUTCH_wiki(train[10m]_test[1m])_a0.001_OI.txt")
+# print("LM created!")
+
+# """
+# 	Wiki (ordered)
+# 	Train --   5m
+# 	Test  -- 500k (novel tokens)
+# """
+# # ORDERED OUTBOUND
+# train = ModulateText(dutch_wiki_5m, language="dutch")
+# model = NgramModel(train.tokens, alpha=0.001, n=3)
+# print("LM setup complete!")
+# test = ModulateText(dutch_wiki_500k, state="ordered outbound", language="dutch")
+# print("Test text created!")
+# t = LMResults(model, test)
+# t.get_results("DUTCH_wiki(train[5m]_test[500k])_a0.001_OO.txt")
+# file = open("DUTCH_wiki_model(train[5m])_a0.001", "wb")
+# p.dump(model, file)
+# print("LM created!")
+
+# # ORDERED INBOUND
+# test = ModulateText(dutch_wiki_5m, language="dutch")
+# print("Test text created!")
+# t = LMResults(model, test)
+# t.get_results("DUTCH_wiki(train[5m]_test[500k])_a0.001_OI.txt")
+# print("LM created!")
+
+
+
+
+
+
+
 """
 	Gutenberg (ordered)
-	Train -- 10m
-	Test  --  1m (novel tokens)
+	Train --   1m
+	Test  -- 100k (novel tokens)
 """
 # ORDERED OUTBOUND
-train = ModulateText(dutch_gutenberg_10m, language="dutch")
-model = NgramModel(train.tokens, alpha=0.001, n=3)
+train = ModulateText(dutch_gutenberg_1m, language="dutch")
+model = NgramModel(train.tokens, alpha=0.01, n=3)
 print("LM setup complete!")
-test = ModulateText(dutch_gutenberg_1m, state="ordered outbound", language="dutch")
+test = ModulateText(dutch_gutenberg_100k, state="ordered outbound", language="dutch")
 print("Test text created!")
 t = LMResults(model, test)
-t.get_results("DUTCH_gutenberg(train[10m]_test[1m])_a0.001_OO.txt")
-file = open("DUTCH_gutenberg_model(train[10m])_a0.001", "wb")
+t.get_results("dutch_gutenberg(train[1m]_test[100k])_a0.001_OO.txt")
+file = open("dutch_gutenberg_model(train[1m])_a0.001", "wb")
 p.dump(model, file)
 print("LM created!")
 
 # ORDERED INBOUND
-test = ModulateText(dutch_gutenberg_1m, language="dutch")
+train = ModulateText(dutch_gutenberg_1m, language="dutch")
+model = NgramModel(train.tokens, alpha=0.01, n=3)
+test = ModulateText(dutch_gutenberg_100k, language="dutch")
 print("Test text created!")
 t = LMResults(model, test)
-t.get_results("DUTCH_gutenberg(train[10m]_test[1m])_a0.001_OI.txt")
-print("LM created!")
-
+t.get_results("dutch_gutenberg(train[1m]_test[100k])_a0.001_OI.txt")
 """
-	Gutenberg (ordered)
-	Train --   5m
-	Test  -- 500k (novel tokens)
+	wiki (ordered)
+	Train --   1m
+	Test  -- 100k (novel tokens)
 """
 # ORDERED OUTBOUND
-train = ModulateText(dutch_gutenberg_5m, language="dutch")
-model = NgramModel(train.tokens, alpha=0.001, n=3)
+train = ModulateText(dutch_wiki_1m, language="dutch")
+model = NgramModel(train.tokens, alpha=0.01, n=3)
 print("LM setup complete!")
-test = ModulateText(dutch_gutenberg_500k, state="ordered outbound", language="dutch")
+test = ModulateText(dutch_wiki_100k, state="ordered outbound", language="dutch")
 print("Test text created!")
 t = LMResults(model, test)
-t.get_results("DUTCH_gutenberg(train[5m]_test[500k])_a0.001_OO.txt")
-file = open("DUTCH_gutenberg_model(train[5m])_a0.001", "wb")
+t.get_results("dutch_wiki(train[1m]_test[100k])_a0.001_OO.txt")
+file = open("dutch_wiki_model(train[1m])_a0.001", "wb")
 p.dump(model, file)
 print("LM created!")
 
 # ORDERED INBOUND
-test = ModulateText(dutch_gutenberg_5m, language="dutch")
+test = ModulateText(dutch_wiki_100k, language="dutch")
 print("Test text created!")
 t = LMResults(model, test)
-t.get_results("DUTCH_gutenberg(train[5m]_test[500k])_a0.001_OI.txt")
+t.get_results("dutch_wiki(train[1m]_test[100k])_a0.001_OI.txt")
 print("LM created!")
 
 
-"""
-	Wiki (ordered)
-	Train -- 10m
-	Test  --  1m (novel tokens)
-"""
-# ORDERED OUTBOUND
-train = ModulateText(dutch_wiki_10m, language="dutch")
-model = NgramModel(train.tokens, alpha=0.001, n=3)
-print("LM setup complete!")
-test = ModulateText(dutch_wiki_1m, state="ordered outbound", language="dutch")
-print("Test text created!")
-t = LMResults(model, test)
-t.get_results("DUTCH_wiki(train[10m]_test[1m])_a0.001_OO.txt")
-file = open("DUTCH_wiki_model(train[10m])_a0.001", "wb")
-p.dump(model, file)
-print("LM created!")
 
-# ORDERED INBOUND
-test = ModulateText(dutch_wiki_1m, language="dutch")
-print("Test text created!")
-t = LMResults(model, test)
-t.get_results("DUTCH_wiki(train[10m]_test[1m])_a0.001_OI.txt")
-print("LM created!")
 
-"""
-	Wiki (ordered)
-	Train --   5m
-	Test  -- 500k (novel tokens)
-"""
-# ORDERED OUTBOUND
-train = ModulateText(dutch_wiki_5m, language="dutch")
-model = NgramModel(train.tokens, alpha=0.001, n=3)
-print("LM setup complete!")
-test = ModulateText(dutch_wiki_500k, state="ordered outbound", language="dutch")
-print("Test text created!")
-t = LMResults(model, test)
-t.get_results("DUTCH_wiki(train[5m]_test[500k])_a0.001_OO.txt")
-file = open("DUTCH_wiki_model(train[5m])_a0.001", "wb")
-p.dump(model, file)
-print("LM created!")
 
-# ORDERED INBOUND
-test = ModulateText(dutch_wiki_5m, language="dutch")
-print("Test text created!")
-t = LMResults(model, test)
-t.get_results("DUTCH_wiki(train[5m]_test[500k])_a0.001_OI.txt")
-print("LM created!")
+
+
+
 
 
 

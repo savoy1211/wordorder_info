@@ -2,27 +2,27 @@ from lm_results import *
 from small_modulate_text import *
 import pickle as p
 
-# """
-# 	Gutenberg (ordered)
-# 	Train -- 10m
-# 	Test  --  1m (novel tokens)
-# """
-# train = ModulateText(english_gutenberg_10m, language="english")
-# model = NgramModel(train.tokens, alpha=0.01, n=3)
-# print("LM setup complete!")
-# test = ModulateText(english_gutenberg_1m, state="ordered outbound", language="english")
-# print("Test text created!")
-# t = LMResults(model, test)
-# t.get_results("ENGLISH_gutenberg(train[10m]_test[1m])_a0.01_OO.txt")
-# file = open("ENGLISH_gutenberg_model(train[10m])_a0.01", "wb")
-# p.dump(model, file)
-# print("LM created!")
+"""
+	Gutenberg (ordered)
+	Train -- 10m
+	Test  --  1m (novel tokens)
+"""
+train = ModulateText(english_gutenberg_10m, language="english")
+model = NgramModel(train.tokens, alpha=0.01, n=3)
+print("LM setup complete!")
+test = ModulateText(english_gutenberg_10m, state="ordered outbound", language="english")
+print("Test text created!")
+t = LMResults(model, test)
+t.get_results("ENGLISH_gutenberg(train[10m])_a0.01_OO.txt")
+file = open("ENGLISH_gutenberg_model(train[10m])_a0.01", "wb")
+p.dump(model, file)
+print("LM created!")
 
-# test = ModulateText(english_gutenberg_1m, language="english")
-# print("Test text created!")
-# t = LMResults(model, test)
-# t.get_results("ENGLISH_gutenberg(train[10m]_test[1m])_a0.01_OI.txt")
-# print("LM created!")
+test = ModulateText(english_gutenberg_1m, language="english")
+print("Test text created!")
+t = LMResults(model, test)
+t.get_results("ENGLISH_gutenberg(train[10m]_test[1m])_a0.01_OI.txt")
+print("LM created!")
 
 # """
 # 	Gutenberg (ordered)
@@ -32,11 +32,11 @@ import pickle as p
 # train = ModulateText(english_gutenberg_5m, language="english")
 # model = NgramModel(train.tokens, alpha=0.01, n=3)
 # print("LM setup complete!")
-# test = ModulateText(english_gutenberg_500k, state="ordered outbound", language="english")
+# test = ModulateText(english_gutenberg_5m[:int(len(english_gutenberg_5m)/10)], state="ordered outbound", language="english")
 # print("Test text created!")
 # t = LMResults(model, test)
-# t.get_results("ENGLISH_gutenberg(train[5m]_test[500k])_a0.01_OO.txt")
-# file = open("ENGLISH_gutenberg_model(train[5m])_a0.01", "wb")
+# t.get_results("###ENGLISH_gutenberg(train[5m]_test[500k])_a0.01_OO.txt")
+# # file = open("ENGLISH_gutenberg_model(train[5m])_a0.01", "wb")
 # p.dump(model, file)
 # print("LM created!")
 

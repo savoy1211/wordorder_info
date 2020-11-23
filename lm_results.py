@@ -1,7 +1,10 @@
 from modulate_text import *
 from small_ngram_model import *
-from load_wiki_txt import *
-from test_token_vocab_size import *
+
+# from load_wiki_txt import *
+from small_load_txt import *
+
+# from test_token_vocab_size import *
 # from hungarian_tokens_sents import *
 import numpy as np
 import pandas as pd
@@ -83,7 +86,7 @@ class LMResults:
   def get_sents(self, test):
     if test.language == "english":
       sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
-      return sent_detector.tokenize(t.strip(), realign_boundaries=False)
+      return sent_detector.tokenize(test.text.strip(), realign_boundaries=False)
     elif test.language == "chinese":
       return list(self.chinese_sents(test.text))
     # elif test.language == "dutch" or test.language == "turkish":
