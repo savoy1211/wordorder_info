@@ -2,11 +2,20 @@
  
 This project uses n-gram models to calculate the word order entropy of languages such as English, Dutch, Turkish, Mandarin, and Polish. For each language, we've created a corpus containing texts from Project Gutenberg.
 
+### 0. Corpora
+
+Request for a link to the corpora at wrnkle at gmail dot com
+Then create a new folder ```texts```:
+```sh
+$ mkdir texts
+$ cd texts
+```
+Move the corpora into this directory
+
 ### 1. Setup
 
 Create a virtual environment called ```wordorder-info-env```:
 ```sh
-$ cd wordorder_info
 $ python3 -m venv wordorder-info-env
 ```
 Activate ```wordorder-info-env```:
